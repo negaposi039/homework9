@@ -30,7 +30,7 @@ Node* searchIterative(Node* head, int key);  /* search the node for the key */
 int freeBST(Node* head); /* free all memories allocated to the tree */
 
 /* you may add your own defined functions if necessary */
-void freeNode(Node* ptr);
+void freeNode(Node* ptr); // 재귀 함수로 노드 메모리 할당 해제 함수
 
 int main()
 {
@@ -40,6 +40,7 @@ int main()
 	Node* ptr = NULL;	/* temp */
 
 	do{
+		printf("\n[----- [Kim Hyeong Jin]  [2021041079] -----]\n");
 		printf("\n\n");
 		printf("----------------------------------------------------------------\n");
 		printf("                   Binary Search Tree #1                        \n");
@@ -58,7 +59,7 @@ int main()
 		case 'z': case 'Z': // 메뉴 z : 트리 초기화 함수 호출
 			initializeBST(&head);
 			break;
-		case 'q': case 'Q': // 메뉴 q : 트리 메모리 할당 해제 함수 호출
+		case 'q': case 'Q': // 메뉴 q : 메모리 할당 해제 함수 호출
 			freeBST(head);
 			break;
 		case 'n': case 'N': // 메뉴 n : 노드 추가 함수 호출
@@ -153,22 +154,22 @@ void postorderTraversal(Node* ptr) // 후위 운행 함수
 }
 
 
-int insert(Node* head, int key)
+int insert(Node* head, int key) // 트리 노드 추가 함수
 {
-	Node* newNode = (Node*)malloc(sizeof(Node));
-	newNode->key = key;
+	Node* newNode = (Node*)malloc(sizeof(Node)); // 새로 추가할 노드의 부모 노드 포인터 할당
+	newNode->key = key; // 입력한 key 값 저장
 	newNode->left = NULL;
 	newNode->right = NULL;
 
-	if (head->left == NULL) {
-		head->left = newNode;
+	if (head->left == NULL) { // 트리에 노드가 없으면
+		head->left = newNode;  // 새로 추가할 노드를 첫 노드로 저장
 		return 1;
 	}
 
 	/* head->left is the root */
-	Node* ptr = head->left;
+	Node* ptr = head->left;  // ptr 포인터에 head->left 저장
 
-	Node* parentNode = NULL;
+	Node* parentNode = NULL; // parentNode 포인터에 NULL 저장
 	while(ptr != NULL) {
 
 		/* if there is a node for the key, then just return */
@@ -182,29 +183,29 @@ int insert(Node* head, int key)
 		 * then the new node has to be inserted into the right subtree;
 		 * otherwise the left subtree.
 		 */
-		if(ptr->key < key)
-			ptr = ptr->right;
+		if(ptr->key < key) // ptr->key < key 이면
+			ptr = ptr->right; // ptr에 ptr->right 저장
 		else
-			ptr = ptr->left;
+			ptr = ptr->left; // ptr에 ptr->left 저장
 	}
 
 	/* linking the new node to the parent */
-	if(parentNode->key > key)
-		parentNode->left = newNode;
+	if(parentNode->key > key) // parentNode->key > key 이면
+		parentNode->left = newNode; // 왼쪽에 newNode 저장
 	else
-		parentNode->right = newNode;
+		parentNode->right = newNode; // 오른쪽에 newNode 저장
 	return 1;
 }
 
-int deleteLeafNode(Node* head, int key)
+int deleteLeafNode(Node* head, int key) // 단말 노드 삭제 함수
 {
-	if (head == NULL) {
-		printf("\n Nothing to delete!!\n");
+	if (head == NULL) { // head가 NULL 이면
+		printf("\n Nothing to delete!!\n"); // 에러 메시지
 		return -1;
 	}
 
-	if (head->left == NULL) {
-		printf("\n Nothing to delete!!\n");
+	if (head->left == NULL) { // head->left가 NULL 이면
+		printf("\n Nothing to delete!!\n"); // 에러 메시지
 		return -1;
 	}
 
@@ -218,23 +219,23 @@ int deleteLeafNode(Node* head, int key)
 
 	while(ptr != NULL) {
 
-		if(ptr->key == key) {
-			if(ptr->left == NULL && ptr->right == NULL) {
+		if(ptr->key == key) { // ptr->key가 key이면
+			if(ptr->left == NULL && ptr->right == NULL) { // ptr이 단말 노드이면
 
 				/* root node case */
 				if(parentNode == head)
-					head->left = NULL;
+					head->left = NULL; // NULL 저장
 
 				/* left node case or right case*/
 				if(parentNode->left == ptr)
-					parentNode->left = NULL;
+					parentNode->left = NULL; // NULL 저장
 				else
-					parentNode->right = NULL;
+					parentNode->right = NULL; // NULL 저장
 
-				free(ptr);
+				free(ptr); // 메모리 해제
 			}
-			else {
-				printf("the node [%d] is not a leaf \n", ptr->key);
+			else { // 단말 노드가 아닐 경우
+				printf("the node [%d] is not a leaf \n", ptr->key); // 단말 노드가 아니라는 메시지
 			}
 			return 1;
 		}
@@ -246,74 +247,74 @@ int deleteLeafNode(Node* head, int key)
 		 * then the new node has to be inserted into the right subtree;
 		 * otherwise the left subtree.
 		 */
-		if(ptr->key < key)
-			ptr = ptr->right;
+		if(ptr->key < key) // ptr->key < key이면
+			ptr = ptr->right; // ptr에 ptr->right 저장
 		else
-			ptr = ptr->left;
+			ptr = ptr->left; // ptr에 ptr->left 저장
 
 
 	}
 
-	printf("Cannot find the node for key [%d]\n ", key);
+	printf("Cannot find the node for key [%d]\n ", key); // 이외의 경우 key에 대한 노드가 없다는 메시지
 
 	return 1;
 }
 
-Node* searchRecursive(Node* ptr, int key)
+Node* searchRecursive(Node* ptr, int key) // 재귀함수로 key 값에 대한 노드 탐색 함수
 {
-	if(ptr == NULL)
-		return NULL;
+	if(ptr == NULL) // ptr이 NULL이면
+		return NULL; // NULL 리턴
 
-	if(ptr->key < key)
-		ptr = searchRecursive(ptr->right, key);
-	else if(ptr->key > key)
-		ptr = searchRecursive(ptr->left, key);
+	if(ptr->key < key) // 입력받은 key 값이 더 크면
+		ptr = searchRecursive(ptr->right, key); // 함수 호출하여 오른쪽 탐색
+	else if(ptr->key > key) // ptr->key가 더 크면
+		ptr = searchRecursive(ptr->left, key); // 함수 호출하여 왼쪽 탐색
 
 	/* if ptr->key == key */
-	return ptr;
+	return ptr; // ptr 리턴
 
 }
-Node* searchIterative(Node* head, int key)
+Node* searchIterative(Node* head, int key) // 반복문으로 key 값에 대한 노드 탐색 함수
 {
 	/* root node */
-	Node* ptr = head->left;
+	Node* ptr = head->left; // key 값에 대한 노드 포인터
 
-	while(ptr != NULL)
+	while(ptr != NULL) // NULL이 아니면 반복
 	{
-		if(ptr->key == key)
-			return ptr;
+		if(ptr->key == key) // key 값과 같으면
+			return ptr; // ptr 리턴
 
-		if(ptr->key < key) ptr = ptr->right;
-		else
-			ptr = ptr->left;
+		if(ptr->key < key) ptr = ptr->right; // key 값이 더 크면 오른쪽 탐색
+		else // 이외의 경우 (key 값이 더 작으면)
+			ptr = ptr->left; // 왼쪽 탐색
 	}
 
 	return NULL;
 }
 
-void freeNode(Node* ptr)
+void freeNode(Node* ptr) // 재귀함수로 노드 메모리 할당 해제 함수
 {
 	if(ptr) {
-		freeNode(ptr->left);
-		freeNode(ptr->right);
-		free(ptr);
+		freeNode(ptr->left); // 왼쪽 자식노드로 freeNode 호출
+		freeNode(ptr->right); // 오른쪽 자식노드로 freeNode 호출
+		free(ptr); // ptr 메모리 할당 해제
 	}
 }
 
-int freeBST(Node* head)
+int freeBST(Node* head) // 메모리 할당 해제 함수
 {
 
-	if(head->left == head)
+	if(head->left == head) // head->left가 head이면
 	{
-		free(head);
+		free(head); // head 할당 해제
 		return 1;
 	}
 
-	Node* p = head->left;
+	Node* p = head->left; 
 
-	freeNode(p);
+	freeNode(p); // freeNode 함수 호출
 
-	free(head);
+	free(head); // head 할당 해제
 	return 1;
 }
 
