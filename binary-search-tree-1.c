@@ -109,15 +109,15 @@ int main()
 	return 1;
 }
 
-int initializeBST(Node** h) {
+int initializeBST(Node** h) { // 트리 초기화 함수
 
 	/* if the tree is not empty, then remove all allocated nodes from the tree*/
-	if(*h != NULL)
-		freeBST(*h);
+	if(*h != NULL) // NULL이 아닐 시
+		freeBST(*h); // 할당 해제 함수 호출
 
 	/* create a head node */
-	*h = (Node*)malloc(sizeof(Node));
-	(*h)->left = NULL;	/* root */
+	*h = (Node*)malloc(sizeof(Node)); // 동적 할당
+	(*h)->left = NULL;	/* root */ // 초기화
 	(*h)->right = *h;
 	(*h)->key = -9999;
 	return 1;
@@ -125,30 +125,30 @@ int initializeBST(Node** h) {
 
 
 
-void inorderTraversal(Node* ptr)
+void inorderTraversal(Node* ptr) // 중위 운행 함수
 {
 	if(ptr) {
-		inorderTraversal(ptr->left);
-		printf(" [%d] ", ptr->key);
-		inorderTraversal(ptr->right);
+		inorderTraversal(ptr->left); // 부모 노드의 왼쪽 자식 노드 탐색
+		printf(" [%d] ", ptr->key); // 부모 노드의 key 값 출력
+		inorderTraversal(ptr->right); // 부모 노드의 오른쪽 자식 노드 탐색
 	}
 }
 
-void preorderTraversal(Node* ptr)
+void preorderTraversal(Node* ptr) // 전위 운행 함수
 {
 	if(ptr) {
-		printf(" [%d] ", ptr->key);
-		preorderTraversal(ptr->left);
-		preorderTraversal(ptr->right);
+		printf(" [%d] ", ptr->key); // 부모 노드의 key 값 출력
+		preorderTraversal(ptr->left); // 부모 노드의 왼쪽 자식 노드 탐색
+		preorderTraversal(ptr->right); // 부모 노드의 오른쪽 자식 노드 탐색
 	}
 }
 
-void postorderTraversal(Node* ptr)
+void postorderTraversal(Node* ptr) // 후위 운행 함수
 {
 	if(ptr) {
-		postorderTraversal(ptr->left);
-		postorderTraversal(ptr->right);
-		printf(" [%d] ", ptr->key);
+		postorderTraversal(ptr->left); // 부모 노드의 왼쪽 자식 노드 탐색
+		postorderTraversal(ptr->right); // 부모 노드의 오른쪽 자식 노드 탐색
+		printf(" [%d] ", ptr->key); // 부모 노드의 key 값 출력
 	}
 }
 
